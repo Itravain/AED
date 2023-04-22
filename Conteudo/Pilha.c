@@ -37,7 +37,7 @@ No_t *empilhar(No_t *topo){
 }
 
 No_t *desempilhar(No_t **p_topo){
-    if(*p_topo){
+    if(p_topo){
         No_t *remove = *p_topo;
         *p_topo = remove->proximo;
         return remove;
