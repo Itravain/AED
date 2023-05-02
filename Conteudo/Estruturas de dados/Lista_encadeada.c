@@ -1,61 +1,101 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
 
-// Definição da estrutura da lista encadeada
-typedef struct Node {
-    char* nome;
-    struct Node* proximo;
-} Node;
+typedef struct no{
+    int num;
+    struct no *prox;
+}No;
 
-// Função para inserir um elemento no início da lista
-void insere_no_inicio(Node** inicio, char* nome) {
-    // Aloca espaço na memória para o novo nó
-    Node* novo_no = (Node*)malloc(sizeof(Node));
-    
-    // Aloca espaço na memória para a string do novo nó
-    novo_no->nome = (char*)malloc(sizeof(char) * (strlen(nome) + 1));
-    
-    // Copia a string passada como argumento para o novo nó
-    strcpy(novo_no->nome, nome);
-    
-    // Define o próximo nó como o atual início da lista
-    novo_no->proximo = *inicio;
-    
-    // Define o novo nó como o início da lista
-    *inicio = novo_no;
-}
-
-// Função para imprimir os elementos da lista
-void imprime_lista(Node* inicio) {
-    // Percorre a lista enquanto houver nós
-    while (inicio != NULL) {
-        // Imprime a string do nó atual
-        printf("%s ", inicio->nome);
-        
-        // Avança para o próximo nó
-        inicio = inicio->proximo;
+void inserir_inicio(No **p_inicio_lista, int num_novo){
+    No *novo_no = malloc(sizeof(No));
+    if (novo_no){
+        novo_no -> num = num_novo;
+        novo_no -> prox = *p_inicio_lista;
+        *p_inicio_lista = novo_no;
     }
-    
-    // Imprime uma quebra de linha ao final
-    printf("\n");
+    else{
+        printf("Não foi possível alocar memória para inserir no inicio da lista");
+    }        
 }
 
-int main() {
-    // Define o início da lista como nulo
-    Node* inicio = NULL;
-    
-    // Insere elementos na lista
-    insere_no_inicio(&inicio, "João");
-    insere_no_inicio(&inicio, "Maria");
-    insere_no_inicio(&inicio, "Pedro");
-    
-    // Imprime a lista
-    imprime_lista(inicio);
-    
-    // Remove elementos da lista
-    //remove_do_inicio(&inicio);
-    //remove_do_inicio(&inicio);
-    
+
+
+void inserir_fim(No **p_inicio_lista, int num_novo){
+    No *aux, *novo_no = malloc(sizeof(No));
+
+    //condicional para saber se a memória do novo no foi alocada com sucesso
+    if (novo_no){
+        //Criando um novo no
+        novo_no->num = num_novo; 
+        novo_no->prox = NULL;
+
+        //se o inicio da estiver preenchido
+        if(*p_inicio_lista == NULL){
+            *p_inicio_lista = novo_no;
+        }
+        else{
+            //O ponteiro auxiliar recebe o início da lista
+            aux = *p_inicio_lista;
+            while (aux->prox){
+                aux = aux->prox; 
+            }
+            (*aux).prox = novo_no; 
+        }
+    }
+    else{
+        printf("Não foi possível alocar memória para inserir no final da lista. ");
+    }
+}
+
+void inserir_meio(No **p_inicio_lista, int novo_num, int ref){
+    No *novo_no = malloc(sizeof(No));
+
+    if (novo_no){
+        novo_no->num = novo_num;
+
+        if (*p_inicio_lista == NULL){
+            novo_no->prox = NULL;
+            *p_inicio_lista = novo_no;
+        }
+        else{
+            No *aux;
+            aux = *p_inicio_lista;
+            while (aux->prox && aux->num != ref){
+                aux = aux->prox;
+            }
+            novo_no->prox = aux->prox;
+            aux->prox = novo_no;
+        }
+
+    }
+    else{
+        printf("Não foi possível alocar memótia para um novo nó\n");
+    }
+}
+
+void imprimir_lista(No **lista){
+    No *aux = *lista;
+    int i = 1;
+
+    while (aux){
+        printf("o %d° numero: %d\n", i++, aux->num);
+        aux = aux->prox; 
+    }
+
+}
+
+
+int main(void){
+    No *lista_inicio = malloc(sizeof(No)); 
+    lista_inicio = NULL;
+    inserir_inicio(&lista_inicio, 12);
+    printf("O primeiro elemento da lista é: %d.\n", lista_inicio->num);
+    inserir_inicio(&lista_inicio, 14);
+    printf("O primeiro elemento da lista é: %d.\n", lista_inicio->num);
+    inserir_meio(&lista_inicio, 13, 14);
+    imprimir_lista(&lista_inicio);
+
+
+
     return 0;
 }
