@@ -66,50 +66,116 @@ void selectionSort(int num[], int tam){
     }
 }
 
-void merge(int *V, int inicio, int meio, int fim){
-	int *temp, p1, p2, tamanho, i, j, k;
-	int fim1 = 0, fim2 = 0;
-	tamanho = fim-inicio+1;
-	p1 = inicio;
-	p2 = meio +1;
-	temp = (int *) malloc(tamanho*sizeof(int));
-	if(temp != NULL){
-		for(i = 0; i<tamanho; i++){
-			if(!fim1 && !fim2){
-				if(V[p1] < V[p2]){
-					temp[i]= V[p1++];
-				}
-				else{
-					temp[i] = V[p2++];
-				}
-				if(p1>meio) fim1=1;
-				if(p2>fim) fim2=1;
-			}else{
-				if(!fim1)
-					temp[i]= V[p1++];
-				else
-					temp[i]= V[p2++];
-			}
-		}
-		for(j=0, k=inicio; j<tamanho; j++, k++){
-			V[k]=temp[j];
-		}
-	}
-	free(temp);
+void Intercala (int v[], int inicio, int meio, int fim){
+    int i, j, k, *w;
+    w = malloc ((fim-inicio) * sizeof(int));
+    i = inicio; j = meio; k = 0;
+    while (i < meio && j < fim){
+        if (v[j] >= v[i]){
+            w[k] = v[i];
+            k++;
+            i++;
+        }
+        else{ 
+            w[k] = v[j];
+            k++;
+            j++;
+        }
+    }
+    while (i < meio){
+        w[k] = v[i];
+        k++;
+        i++;
+    }
+    while (j < fim){
+        w[k] = v[j];
+        k++;
+        j++;
+    }
+    for (i = inicio; i < fim; i++){
+        v[i] = w[i-inicio];
+    }       
+    free (w); 
 }
 
-void mergeSort(int *V, int inicio, int fim){
+void mergeSort(int v[], int inicio, int fim){
     int meio;
-    if (inicio<fim){
+    if (fim>inicio){
         meio = floor((inicio+fim)/2);
-        mergeSort(V, inicio, meio);
-        mergeSort(V, meio+1, fim);
-        merge(V, inicio, meio, fim);
+        mergeSort(v, inicio, meio);
+        mergeSort(v, meio+1, fim);
+        Intercala(v, inicio, meio, fim);
+    }
+}
+
+void Insere_Heap(int num[], int novo){
+    int f, aux;
+    f = novo + 1;
+    while (num[f/2] < num[f] && f > 1) {
+        aux = num[f/2]; 
+        num[f/2] = num[f]; 
+        num[f] = aux;
+        f = f/2;       
     }
 }
 
 
+void heapify(int num[], int tam){
+    int aux, f = 2;
+    while (tam >= f){
+        if (num[f] < num[f+1] && f < tam){
+            f++;
+        }
+        if (num[f/2] >= num[f]){
+            break;
+        }
+        aux = num[f/2]; 
+        num[f/2] = num[f]; 
+        num[f] = aux;
+        f *= 2;
+    }
+}
 
+void Heapsort (int num[], int tam){
+    int x;
+    for (x = 1; x < tam; x++)
+        Insere_Heap (num, x);
+    for (x = tam; x > 1; x--){
+        //troca de posições
+        int t = num[1]; 
+        num[1] = num[x]; 
+        num[x] = t;
+        heapify(num, x-1);
+    }
+}
+
+int particionar (int num[], int inicio, int fim){
+    int c, aux, k, j;
+    j = inicio;
+    c = num[fim];
+    for (k = inicio; fim > k; k++){
+        if (c >= num[k]){
+            aux = num[j];
+            num[j] = num[k];
+            num[k] = aux;
+            j++;
+        }
+    }
+    num[fim] = num[j];
+    num[j] = c;
+
+    return j;
+}
+
+
+void Quicksort (int num[], int inicio, int fim){
+    int pivo;
+    if (inicio < fim){
+        pivo = particionar (num, inicio, fim);
+        Quicksort (num, inicio, pivo - 1);
+        Quicksort (num, pivo + 1, fim);
+    }
+}
 
 
 int main(){
@@ -125,7 +191,7 @@ int main(){
     //imprimir_vetor(original, tam);
 
     printf("---------------------------------------------\n");
-    printf("Selecione o algoritmo para medir o tempo de execução\n0-Sair\n1-InsertSort\n2-SelectionSort\n3-mergeSort\n");
+    printf("Selecione o algoritmo para medir o tempo de execução\n0-Sair\n1-InsertSort\n2-SelectionSort\n3-mergeSort\n4-heapSort\n5-quickSort\n");
     printf("---------------------------------------------\n");
 
     while (seletor != 0){
@@ -157,6 +223,7 @@ int main(){
             printf("Tempo de execução selectionSort: %f s\n", tempo);
            
             break;
+
         case 3:
             tempo = 0.0; 
             int *cop_merge = NULL;
@@ -168,6 +235,34 @@ int main(){
 
             tempo += (double)(end - begin)/CLOCKS_PER_SEC;
             printf("Tempo de execução mergeSort: %f s\n", tempo);
+        
+            break;
+
+        case 4:
+            tempo = 0.0; 
+            int *cop_heap = NULL;
+            copiar_vetor(&original, &cop_heap, tam);
+            
+            begin = clock();
+            Heapsort(cop_heap, tam);
+            end = clock();
+
+            tempo += (double)(end - begin)/CLOCKS_PER_SEC;
+            printf("Tempo de execução heapSort: %f s\n", tempo);
+        
+            break;
+
+        case 5:
+            tempo = 0.0; 
+            int *cop_quick = NULL;
+            copiar_vetor(&original, &cop_quick, tam);
+            
+            begin = clock();
+            Quicksort(cop_quick, 0, tam);
+            end = clock();
+
+            tempo += (double)(end - begin)/CLOCKS_PER_SEC;
+            printf("Tempo de execução quickSort: %f s\n", tempo);
         
             break;
         default:
