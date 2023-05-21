@@ -4,15 +4,15 @@
 
 int zelda(char frase[], int n){
 	char palavra[6] = "zelda";
-	int pos_palavra, pos_frase, qtd = 0;
+	int pos_palavra, pos_frase = 0, qtd = 0;
 
 	while(qtd == 0 && pos_frase <= n && n<5){
 	pos_palavra = 0;
-	while (frase[pos_frase] == palavra[pos_palavra] || palavra[pos_palavra]-32 == frase[pos_frase]) {
+		while (frase[pos_frase] == palavra[pos_palavra] || palavra[pos_palavra]-32 == frase[pos_frase]) {
 		pos_frase++, pos_palavra++;
-		if (pos_palavra == 5) {
-			qtd++;
-		}
+			if (pos_palavra == 5) {
+				qtd++;
+			}
 			pos_frase++;
 		}
 	}
