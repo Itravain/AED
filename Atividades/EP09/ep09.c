@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+//funcao para criar matriz
 void matriz(int linha, int coluna, char ***matriz) {
   int i, j;
 
@@ -11,6 +12,7 @@ void matriz(int linha, int coluna, char ***matriz) {
   }
 }
 
+//funcao para imprimir matriz. Foi utilizada nos testes
 void imprimir(char **mapa, int coluna, int linha) {
   int i, j;
   for (i = 0; i < linha; i++) {
@@ -21,6 +23,7 @@ void imprimir(char **mapa, int coluna, int linha) {
   }
 }
 
+//funcao principal do programa, analisas as condicoes
 char verificacao(char **mapa, int coluna, int linha) {
   int j = 0, i = 0;
   char comando = mapa[0][0];
