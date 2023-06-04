@@ -210,6 +210,23 @@ NoArv *remover_no(NoArv *raiz, int num){
     }
   }
 }
+//busca em arvore binaria
+NoArv *busca(NoArv *raiz, int num){
+  if (raiz == NULL){
+    return NULL;
+  }
+  else if (raiz->num == num){
+    return raiz;
+  }
+  else{
+    if (raiz->num < num){
+      return busca(raiz->direita, num);
+    }
+    else{
+      return busca(raiz->esquerda, num);
+    }
+  }
+}
 
 int main(){
   NoArv *raiz = NULL;
@@ -223,6 +240,8 @@ int main(){
     printf("Digite 2 para remover um número da árvore\n");
     printf("Digite 3 para imprimir a árvore em ordem crescente\n");
     printf("Digite 4 para imprimir a altura da árvore\n");
+    printf("Digite 5 para imprimir a quantidade de elementos da árvore\n");
+    printf("Digite 6 para verificar se um elemento existe na árvore\n");
     printf("Digite 0 para sair\n");
     scanf("%d", &num);
     switch (num){
@@ -241,6 +260,20 @@ int main(){
         break;
       case 4:
         printf("Altura da árvore: %d\n", altura(raiz));
+        break;
+      case 5:
+        printf("Quantidade de elementos da árvore: %d\n", qtd_elementos(raiz));
+        break;
+      //case 6 para verificar se um elemento existe na arvore
+      case 6:
+        printf("Digite um número para verificar se existe na árvore: ");
+        scanf("%d", &num);
+        if (busca(raiz, num) != NULL){
+          printf("O número %d existe na árvore\n", num);
+        }
+        else{
+          printf("O número %d não existe na árvore\n", num);
+        }
         break;
       case 0:
         break;
