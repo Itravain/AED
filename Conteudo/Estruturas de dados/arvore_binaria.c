@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+//estrutura da arvore
 typedef struct noarv{
   int num;
   struct noarv *esquerda;
@@ -8,6 +9,7 @@ typedef struct noarv{
 
 }NoArv;
 
+//funcao para inserir um numero na arvore
 NoArv *insert_1(NoArv *raiz, int num){
   if (raiz == NULL) {
     NoArv *novo_no = malloc(sizeof(NoArv));
@@ -27,7 +29,7 @@ NoArv *insert_1(NoArv *raiz, int num){
   }
 }
 
-
+//funcao para adicionar um numero no vetor 
 void adicionar_num_vetor (int num, int vetor_arvore[]){
   if (vetor_arvore[0] == 0){
     vetor_arvore[1] = num;
@@ -37,15 +39,7 @@ void adicionar_num_vetor (int num, int vetor_arvore[]){
   }
   vetor_arvore[0] += 1; 
 }
-
-void imprimir_erd(NoArv *raiz){
-  if (raiz){
-    imprimir_erd(raiz->esquerda);
-    printf("%d ", raiz->num);
-    imprimir_erd(raiz->direita);
-  }
-}
-
+//funcao para alocar os elementos da arvore em um vetor
 void alocar_erd(NoArv *raiz, int vetor_arvore[]){
   if (raiz){
     alocar_erd(raiz->esquerda, vetor_arvore);
@@ -54,6 +48,16 @@ void alocar_erd(NoArv *raiz, int vetor_arvore[]){
   }
 }
 
+//funcao para imprimir a arvore em ordem crescente
+void imprimir_erd(NoArv *raiz){
+  if (raiz){
+    imprimir_erd(raiz->esquerda);
+    printf("%d ", raiz->num);
+    imprimir_erd(raiz->direita);
+  }
+}
+
+//funcao para calcular a altura da arvore
 int altura(NoArv *raiz){
   int esq, dir;
     if(raiz == NULL){
@@ -71,6 +75,7 @@ int altura(NoArv *raiz){
     }
 }
 
+//funcao para contar a quantidade de elementos da arvore
 int qtd_elementos(NoArv *raiz){
   if (raiz){
     return 1 + qtd_elementos(raiz->esquerda) + qtd_elementos(raiz->direita);
@@ -80,28 +85,168 @@ int qtd_elementos(NoArv *raiz){
   }
 }
 
+//funcao para remover raiz da arvore
+NoArv *remover_raiz(NoArv *raiz){
+  NoArv *aux = raiz;
+  NoArv *pai = NULL;
+  //caso a arvore esteja vazia
+  if (raiz->esquerda == NULL && raiz->direita == NULL){
+    free(raiz);
+    return NULL;
+  }
+  //caso a arvore tenha apenas um elemento
+  else if (raiz->esquerda == NULL){
+    raiz = raiz->direita;
+    free(aux);
+    return raiz;
+  }
+  //caso a arvore tenha apenas um elemento
+  else if (raiz->direita == NULL){
+    raiz = raiz->esquerda;
+    free(aux);
+    return raiz;
+  }
+  //caso a arvore tenha dois elementos
+  else{
+    aux = raiz->esquerda;
+    while (aux->direita != NULL){
+      pai = aux;
+      aux = aux->direita;
+    }
+    if (pai != NULL){
+      pai->direita = aux->esquerda;
+      aux->esquerda = raiz->esquerda;
+    }
+    aux->direita = raiz->direita;
+    free(raiz);
+    return aux;
+  }
+}
+
+//funcao para remover no da arvore 
+NoArv *remover_no(NoArv *raiz, int num){
+  NoArv *aux = raiz;
+  NoArv *pai = NULL;
+  //caso a arvore esteja vazia
+  if (raiz == NULL){
+    return NULL;
+  }
+  else if (raiz->num == num){
+    return remover_raiz(raiz);
+  }
+  else{
+    //encontrar o no a ser removido
+    while (aux != NULL && aux->num != num){
+      pai = aux;
+      if (aux->num < num){
+        aux = aux->direita;
+      }
+      else{
+        aux = aux->esquerda;
+      }
+    }
+    if (aux == NULL){
+      return raiz;
+    }
+    //caso o no a ser removido seja uma folha
+    else if (aux->esquerda == NULL && aux->direita == NULL){
+      if (pai->esquerda == aux){
+        pai->esquerda = NULL;
+      }
+      else{
+        pai->direita = NULL;
+      }
+      free(aux);
+      return raiz;
+    }
+    //caso o no a ser removido tenha apenas um filho
+    else if (aux->esquerda == NULL){
+      if (pai->esquerda == aux){
+        pai->esquerda = aux->direita;
+      }
+      else{
+        pai->direita = aux->direita;
+      }
+      free(aux);
+      return raiz;
+    }
+    //caso o no a ser removido tenha apenas um filho
+    else if (aux->direita == NULL){
+      if (pai->esquerda == aux){
+        pai->esquerda = aux->esquerda;
+      }
+      else{
+        pai->direita = aux->esquerda;
+      }
+      free(aux);
+      return raiz;
+    }
+    //caso o no a ser removido tenha dois filhos
+    else{
+      NoArv *aux2 = aux->esquerda;
+      NoArv *pai2 = aux;
+      //encontrar o maior elemento da subarvore esquerda
+      while (aux2->direita != NULL){
+        pai2 = aux2;
+        aux2 = aux2->direita;
+      }
+      //caso o maior elemento da subarvore esquerda seja o filho do no a ser removido
+      if (pai2 != aux){
+        pai2->direita = aux2->esquerda;
+        aux2->esquerda = aux->esquerda;
+      }
+      //caso o maior elemento da subarvore esquerda seja o filho da raiz
+      aux2->direita = aux->direita;
+      if (pai->esquerda == aux){
+        pai->esquerda = aux2;
+      }
+      //caso o maior elemento da subarvore esquerda seja o filho da raiz
+      else{
+        pai->direita = aux2;
+      }
+      //liberar o no a ser removido
+      free(aux);
+      return raiz;
+    }
+  }
+}
+
 int main(){
   NoArv *raiz = NULL;
   int* vetor_arvore = NULL;
   int num = 1;
   
-  while (num > 0) {
-    printf("Digite um número para adicionar a árvore: ");
-    scanf("%d", &num);
-    if (num != -1) {
-      raiz = insert_1(raiz, num); 
-    }
 
-    //imprimir a árvore
-    else if (num == -1){
-      vetor_arvore = (int*)malloc((qtd_elementos(raiz)+1) * sizeof(int));
-      alocar_erd(raiz, vetor_arvore);
-      for (int i = 1; i <= qtd_elementos(raiz); i++){
-        printf("%d ", vetor_arvore[i]);
-      }
-    }
-    else if (num == 0){
-      printf("Altura da árvore: %d\n", altura(raiz));
+  //switch case para escolher a opcao desejada
+  while (num != 0){
+    printf("\nDigite 1 para adicionar um número na árvore\n");
+    printf("Digite 2 para remover um número da árvore\n");
+    printf("Digite 3 para imprimir a árvore em ordem crescente\n");
+    printf("Digite 4 para imprimir a altura da árvore\n");
+    printf("Digite 0 para sair\n");
+    scanf("%d", &num);
+    switch (num){
+      case 1:
+        printf("Digite um número para adicionar a árvore: ");
+        scanf("%d", &num);
+        raiz = insert_1(raiz, num);
+        break;
+      case 2:
+        printf("Digite um número para remover da árvore: ");
+        scanf("%d", &num);
+        raiz = remover_no(raiz, num);
+        break;
+      case 3:
+        imprimir_erd(raiz);
+        break;
+      case 4:
+        printf("Altura da árvore: %d\n", altura(raiz));
+        break;
+      case 0:
+        break;
+      default:
+        printf("Opção inválida\n");
+        break;
     }
   }
 
