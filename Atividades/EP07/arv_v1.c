@@ -8,6 +8,7 @@ typedef struct noarv {
 
 } NoArv;
 
+//funcao para calcular a altura da arvore
 int ind_in_order(char in_order[], char letra){
   int cont = 0;
   while (in_order[cont] != letra){
@@ -43,7 +44,7 @@ void imprimir_edr(NoArv *raiz) {
   
 }
 
-int main() {
+int main(){
   NoArv* raiz;
   int qtd, rep, i, j;
   char* pre_order;

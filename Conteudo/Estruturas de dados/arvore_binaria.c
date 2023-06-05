@@ -210,6 +210,7 @@ NoArv *remover_no(NoArv *raiz, int num){
     }
   }
 }
+
 //busca em arvore binaria
 NoArv *busca(NoArv *raiz, int num){
   if (raiz == NULL){
@@ -225,6 +226,15 @@ NoArv *busca(NoArv *raiz, int num){
     else{
       return busca(raiz->esquerda, num);
     }
+  }
+}
+
+//desalocar a arvore
+void desalocar_arvore(NoArv *raiz){
+  if (raiz){
+    desalocar_arvore(raiz->esquerda);
+    desalocar_arvore(raiz->direita);
+    free(raiz);
   }
 }
 
