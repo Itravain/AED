@@ -29,6 +29,15 @@ NoArv *insert_1(NoArv *raiz, int num){
   }
 }
 
+
+//funcao para limpar vetor
+void limpar_vetor(int vetor_arvore[], int qtd_numeros){
+  int i;
+  for(i = 0; i < qtd_numeros; i++){
+    vetor_arvore[i] = 0;
+  }
+}
+
 //funcao para adicionar um numero no vetor 
 void adicionar_num_vetor (int num, int vetor_arvore[]){
   if (vetor_arvore[0] == 0){
