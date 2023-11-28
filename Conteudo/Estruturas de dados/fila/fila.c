@@ -46,6 +46,7 @@ void removerFila(Fila *fila){
     fila->comeco = fila->comeco->proximo;
     free(fila->comeco->anterior);
     fila->comeco->anterior = NULL;
+    fila->qt_elementos--;
 }
 
 void imprimirFila(Fila *fila){
