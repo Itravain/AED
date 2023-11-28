@@ -1,0 +1,24 @@
+1 Ricardo 1999
+1 Rogerio 1997
+1 Zelia 1998
+1 Rogerio 2002
+1 Zelia 2000
+1 Rogerinho 2004
+1 Zelia 2003
+2 Zelia
+1 Karol 2007
+1 Melissa 2009
+1 Melissa 2010
+1 Rogerinho 2005
+2 Melissa
+1 Melissa 2011
+2 Cristovao
+1 Cristovao 2008
+1 Cristovao 2013
+1 Melissa 2012
+1 Rogerio 1996
+2 Rogerio
+1 Romulo 1994
+1 Cristovao 2014
+2 Romulo
+0

@@ -1,0 +1,30 @@
+Problema 6
+
+Missão de Fuga em Cibersegurança
+Tempo limite: 0,5 s (C/C++), 1,5s (Python/Java)
+
+Em uma instalação de cibersegurança ultra-secreta, um agente de elite se encontra em uma sala
+altamente segura cheia de uma grade complexa de servidores de computador. Cada servidor
+pode estar em um de dois estados: "seguro" (representado por um azulejo preto) ou
+"comprometido" (representado por um azulejo vermelho). O agente inicia sua missão em pé
+sobre um servidor seguro e precisa navegar pela sala para acessar o maior número possível de
+servidores seguros.
+O agente pode se mover de um servidor para um servidor adjacente em quatro direções (para
+cima, para baixo, para a esquerda ou para a direita). No entanto, há uma ressalva: ele não pode
+se mover para um servidor comprometido, uma vez que isso pode acionar alarmes e colocar a
+missão em risco.
+Sua tarefa é escrever um programa que conte o número de servidores seguros que o agente pode
+acessar seguindo essas regras de movimento.
+Entrada
+Cada conjunto de entrada começa com uma linha contendo dois inteiros positivos, W e H, que
+representam o número de servidores nas direções x e y, respectivamente. W e H são ambos
+menores ou iguais a 20.
+As seguintes H linhas do conjunto de dados contêm cada uma W caracteres. Cada caractere
+representa o estado de um servidor de acordo com as seguintes regras:
+'.' representa um servidor seguro (azulejo preto).
+'#' representa um servidor comprometido (azulejo vermelho).
+'@' representa o agente, inicialmente posicionado em um servidor seguro. O símbolo '@' aparece
+exatamente uma vez em cada conjunto de dados.
+Saída
+Seu programa deve imprimir uma linha contendo o número de servidores seguros que o agente
+pode acessar a partir do servidor inicial. Essa contagem inclui o servidor inicial em si.

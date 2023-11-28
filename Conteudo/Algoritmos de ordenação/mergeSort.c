@@ -1,62 +1,75 @@
 #include <stdio.h>
-#include <string.h>
 #include <stdlib.h>
-#include <math.h>
+#include <time.h>
 
-void merge(int *V, int inicio, int meio, int fim){
-	int *temp, p1, p2, tamanho, i, j, k;
-	int fim1 = 0, fim2 = 0;
-	tamanho = fim-inicio+1;
-	p1 = inicio;
-	p2 = meio +1;
-	temp = (int *) malloc(tamanho*sizeof(int));
-	if(temp != NULL){
-		for(i = 0; i<tamanho; i++){
-			if(!fim1 && !fim2){
-				if(V[p1] < V[p2]){
-					temp[i]= V[p1++];
-				}
-				else{
-					temp[i] = V[p2++];
-				}
-				if(p1>meio) fim1=1;
-				if(p2>fim) fim2=1;
-			}else{
-				if(!fim1)
-					temp[i]= V[p1++];
-				else
-					temp[i]= V[p2++];
-			}
-		}
-		for(j=0, k=inicio; j<tamanho; j++, k++){
-			V[k]=temp[j];
-		}
+
+void merge(int *vetor, int primeiro, int meio, int ultimo){
+    int i, j;
+
+	//definir o tamanho dos vetores a serem montados
+	int tamV1 = meio - primeiro + 1;
+	int tamV2 = ultimo - meio;
+
+	//cria os vetores
+	int V1[tamV1 + 1], V2[tamV2 + 1];
+
+	//copia os vetores
+	for(i = primeiro; i <= meio; i++){
+		V1[i - primeiro] = vetor[i];
 	}
-	free(temp);
+	V1[tamV1] = 100000000;
+	for(j = meio + 1; j <= ultimo; j++){
+		V2[j - meio - 1] = vetor[j];
+	}
+	V2[tamV2] = 100000000;
+
+	//ordenar as partes no vetor original
+	i = 0;
+	j = 0;
+	for(int k = primeiro; k <= ultimo; k++){
+		if(V1[i] < V2[j]){
+			vetor[k] = V1[i];
+			i++;
+		}
+		else{
+			vetor[k] = V2[j];
+			j++;
+		}
+	}	
 }
 
-void mergeSort(int *V, int inicio, int fim){
-    int meio;
-    if (inicio<fim){
-        meio = floor((inicio+fim)/2);
-        mergeSort(V, inicio, meio);
-        mergeSort(V, meio+1, fim);
-        merge(V, inicio, meio, fim);
+void mergeSort(int *vetor, int primeiro, int ultimo){
+    if(primeiro < ultimo){
+        int meio = (primeiro+ultimo)/2;
+        mergeSort(vetor, primeiro, meio);
+        mergeSort(vetor, meio + 1, ultimo);
+        merge(vetor, primeiro, meio, ultimo);
     }
 }
 
 
 int main(void){
-	int num[6] = {12, 2, 45, 4, 2, 9}, size = 6;
-	int i;
-	for ( i = 0; i < size; i++){
-		printf("%d\n", num[i]);
-	}
-	mergeSort(num, 0, size-1);
-	for ( i = 0; i < size; i++){
-	printf("%d\n", num[i]);
-	}
+    const int TAM = 20;
+    int vetor[TAM];
 
+    //preencher vetor com numeros aleatorios
+    for(int i = 0; i < TAM; i++){
+        vetor[i] = rand() % 100;
+    }
+    //imprimir vetor desordenado
+    for(int i = 0; i < TAM; i++){
+        printf("%d ", vetor[i]);
+    }
+    printf("\n");
+
+    //ordenar vetor
+    mergeSort(vetor, 0, TAM - 1);
+
+    //imprimir vetor ordenado
+    for(int i = 0; i < TAM; i++){
+        printf("%d ", vetor[i]);
+    }
+    printf("\n");
 
 
     return 0;
